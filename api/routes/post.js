@@ -3,40 +3,36 @@ const router = express.Router();
 
 const PostController = require("../controller/post");
 const multer = require('multer');
+var multerS3 = require('multer-s3')
+var aws = require('aws-sdk')
 
-const imgUpload = require("../../imageUpload.js");
+var accessKeyId =  process.env.AWS_ACCESS_KEY || "AKIAIBE4QTF6F53UMQ3Q";
+var secretAccessKey = process.env.AWS_SECRET_KEY || "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";
 
-/* const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-       // console.log("destination")
-        cb(null, './postPicUploads/')
-    },
-    filename: function (req, file, cb) {
-       // console.log("filename ");
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-}); */
-
-const fileFilter = (req, file, cb) => {
-    // reject a file
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
-
-const upload = multer({
-    storage: multer.MemoryStorage,
-    limits: {
-        fileSize: 1024 * 1024 * 5 // 5mb
-    },
-    fileFilter: fileFilter
+aws.config.update({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey
 });
+
+var s3 = new aws.S3({ /* ... */ });
+
+var uploadS3 = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: 'post-images2/posts',
+      acl: 'public-read',
+      metadata: function (req, file, cb) {
+        cb(null, {fieldName: file.fieldname});
+      },
+      key: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+      }
+    })
+  })
 
 
 // POST - CREATES A NEW POST
-router.post('/add', upload.single('postImage'), imgUpload.uploadToGcs, PostController.add_new_post);
+router.post('/add', uploadS3.single('postImage'), PostController.add_new_post);
 
 // GET - get alll posts
 // '/v1/post' -GET all posts
