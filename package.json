@@ -1,0 +1,22 @@
+{
+  "name": "issuetracker",
+  "version": "1.0.0",
+  "description": "Issue tracker REST API",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "devstart": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.13",
+    "multer": "^1.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
