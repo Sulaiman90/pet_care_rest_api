@@ -20,4 +20,4 @@ dbConnection.once('open', function() {
     console.log("Successfully connected to the database");
 });
 
-console.log("db file ");
+//console.log("db file ");

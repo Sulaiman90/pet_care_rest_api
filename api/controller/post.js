@@ -9,9 +9,15 @@ exports.add_new_post = (req, res) => {
     newPost.time = new Date().valueOf();
     newPost.location.coordinates.lat = req.body.lat;
     newPost.location.coordinates.long = req.body.long;
-    newPost.image = req.file.path;
+   // newPost.image = req.file.path;
     newPost.user = req.body.user;
     newPost.upVotes = req.body.upVotes;
+
+    const data = request.body;
+    if (request.file && request.file.cloudStoragePublicUrl) {
+        data.imageUrl = request.file.cloudStoragePublicUrl;
+        newPost.image = data.imageUrl;
+    }
 
     newPost.save(err => {
         if (err) {
