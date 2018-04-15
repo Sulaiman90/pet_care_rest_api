@@ -46,24 +46,6 @@ exports.getPostDetails = (req, res) => {
 
 exports.updatePost = (req, res) => {
     //console.log("updatePost ");
-    /* Post.findById(req.params.id, function (err, post) {
-        if (err){
-            return res.status(500).send(err);
-        }
-        if(req.body.status != undefined){
-            post.status = req.body.status;
-        }
-        if(req.body.upVotes != undefined){
-            post.upVotes = req.body.upVotes;
-        } 
-        
-        post.save( err => {
-            if (err){
-                res.send(err);
-            }
-            res.status(200).send(post);
-        }); 
-    });  */
     Post.findByIdAndUpdate({ _id: req.params.id }, {$set:req.body}, {new:true}, function (err, post) {
         if (err){
             res.status(500).send(err);

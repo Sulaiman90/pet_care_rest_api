@@ -39,47 +39,10 @@ exports.getUser = (req, res) => {
 // FOR PUT OPERATIONS, body type should be set to url-encoded (not form-data)
 exports.updateUser = (req, res) => {
    // console.log("updateUser ");
-     /* User.findById(req.params.id, function (err, user) {
-        //console.log("updateUser "+req.body.profilePicture);
-        if (err){
-            return res.status(500).send(err);
-        }
-        if(req.body.name != undefined){
-            user.name = req.body.name;
-        } 
-        if(req.file != undefined && req.file.key != undefined){
-            user.profilePicture = req.file.key;
-        } 
-        if(req.body.lat != undefined){
-            user.location.coordinates.lat = req.body.lat;
-        }
-        if(req.body.long != undefined){
-            user.location.coordinates.long = req.body.long;
-        }
-        user.save( err => {
-            if (err){
-                res.send(err);
-            }
-            res.status(200).send(user);
-            //res.json({message : "User info updated"}) 
-        }); 
-    });  */
      User.findByIdAndUpdate({ _id: req.params.id }, {$set:req.body}, {new:true}, function (err, user) {
         if (err){
             res.status(500).send(err);
         } 
         res.status(200).send(user);
     });  
-    // another option
-   /* User.update({ _id: req.params.id }, {
-            $set: {
-                name:req.body.name
-            }
-        },
-        function (err, user) {
-            if (err)
-            return res.status(500).send("There was a problem updating the user.");
-            res.status(200).send(user);
-        }
-    ); */
 }
