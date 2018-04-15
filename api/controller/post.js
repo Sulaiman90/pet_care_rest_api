@@ -10,14 +10,14 @@ exports.add_new_post = (req, res) => {
     newPost.location.coordinates.lat = req.body.lat;
     newPost.location.coordinates.long = req.body.long;
     newPost.image = req.body.image;
-    newPost.user = req.body.user;
+    newPost._user = req.body._user;
     newPost.upVotes = req.body.upVotes;
 
     //console.log(" fieldName "+ req.file.key,req.file.originalname);
 
     newPost.save(err => {
         if (err) {
-            //res.status(500).send("Problem adding new post to the database.");
+            return res.status(500).send("Problem adding new post to the database.");
             res.status(200).send(err);
         }
         res.json({ message: 'New post added successfully' });
@@ -25,14 +25,25 @@ exports.add_new_post = (req, res) => {
 };
 
 exports.get_all_posts = (req, res) => {
-    Post.find({}, (err, posts) => {
+    /* Post.find({}, (err, posts) => {
         if (err) {
             return res.status(500).send("Problem getting all posts.");
             res.status(200).send(err);
         }
         res.json(posts);
-    }); 
-};
+    });  */
+    Post
+    .find()
+    .populate('comments')
+    .populate('_user')
+    .exec((err, posts) => {
+        if (err) {
+            return res.status(500).send("Problem getting all posts.");
+            res.status(200).send(err);
+        }
+        res.json(posts);
+    })
+;};
 
 exports.getPostDetails = (req, res) => {
     Post.findById(req.params.id, (err, post) => {
@@ -55,10 +66,10 @@ exports.updatePost = (req, res) => {
 };
 
 exports.getPostsByAuthorId = (req, res) => {
-    Post.find({ user: req.params.id } , (err, post) => {
+    Post.find({ _user :  req.params.id  } , (err, post) => {
      //   console.log("post "+post);
         if (err) {
-            return res.status(500).send("Problem getting a particular post.");
+            return res.status(500).send(err);
             res.status(200).send(err);
         }
         res.json(post);

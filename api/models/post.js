@@ -24,8 +24,8 @@ var PostSchema = new Schema({
     image:{
         type: String
     },
-    user:{
-        type: String, ref: 'User', required: true
+    _user:{
+        type: Schema.Types.ObjectId, ref: 'User', required: true 
     },
     upVotes:{
         type: Number
