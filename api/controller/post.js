@@ -9,17 +9,11 @@ exports.add_new_post = (req, res) => {
     newPost.time = new Date().valueOf();
     newPost.location.coordinates.lat = req.body.lat;
     newPost.location.coordinates.long = req.body.long;
-    newPost.image = req.file.key;
+    newPost.image = req.body.image;
     newPost.user = req.body.user;
     newPost.upVotes = req.body.upVotes;
 
-    console.log(" fieldName "+ req.file.key,req.file.originalname);
-
-    /* const data = request.body;
-    if (request.file && request.file.cloudStoragePublicUrl) {
-        data.imageUrl = request.file.cloudStoragePublicUrl;
-        newPost.image = data.imageUrl;
-    } */
+    //console.log(" fieldName "+ req.file.key,req.file.originalname);
 
     newPost.save(err => {
         if (err) {
@@ -40,10 +34,52 @@ exports.get_all_posts = (req, res) => {
     }); 
 };
 
+exports.getPostDetails = (req, res) => {
+    Post.findById(req.params.id, (err, post) => {
+        if (err) {
+            return res.status(500).send("Problem getting a particular post.");
+            res.status(200).send(err);
+        }
+        res.json(post);
+    }); 
+};
+
 exports.updatePost = (req, res) => {
-    Post.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, post) {
-        if (err) 
-            return res.status(500).send("There was a problem updating the user.");
+    //console.log("updatePost ");
+    /* Post.findById(req.params.id, function (err, post) {
+        if (err){
+            return res.status(500).send(err);
+        }
+        if(req.body.status != undefined){
+            post.status = req.body.status;
+        }
+        if(req.body.upVotes != undefined){
+            post.upVotes = req.body.upVotes;
+        } 
+        
+        post.save( err => {
+            if (err){
+                res.send(err);
+            }
+            res.status(200).send(post);
+        }); 
+    });  */
+    Post.findByIdAndUpdate({ _id: req.params.id }, {$set:req.body}, {new:true}, function (err, post) {
+        if (err){
+            res.status(500).send(err);
+        } 
         res.status(200).send(post);
-    });
-}
+    });  
+};
+
+exports.getPostsByAuthorId = (req, res) => {
+    Post.find({ user: req.params.id } , (err, post) => {
+     //   console.log("post "+post);
+        if (err) {
+            return res.status(500).send("Problem getting a particular post.");
+            res.status(200).send(err);
+        }
+        res.json(post);
+    }); 
+};
+

@@ -1,26 +1,27 @@
 const express = require('express');
-const bodyParser = require('body-Parser');
 const app = express();
+
 const config = require('./config');
 const db = require('./db'); 
 const userRoutes = require('./api/routes/user');
 const postRoutes = require('./api/routes/post');
 const commentRoutes = require('./api/routes/comment');
 
+const bodyParser = require('body-Parser');
+
 const port = process.env.PORT || config.port;
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+/* app.use(bodyParser.json({
+    limit: config.bodyLimit
+})); */
 
 // middleware
 
 app.use('/profilePicUploads',express.static('profilePicUploads'));
 app.use('/postPicUploads',express.static('postPicUploads'));
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-/* app.use(bodyParser.json({
-    limit: config.bodyLimit
-})); */
 
 
 app.use((req, res, next) => {
@@ -38,10 +39,10 @@ app.use((req, res, next) => {
 
 
 //Routes which should handle requests
-/* app.use('/',  (req, res) => {
+
+/*  express.Router().get("/api/v1/", (req, res) => {
     res.json({ message: "Welcome to IssueTracker REST API V1" });
-});
-  */
+}); */
 
 // api routes v1
 app.use('/api/v1/user', userRoutes);

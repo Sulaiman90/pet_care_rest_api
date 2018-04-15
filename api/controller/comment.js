@@ -14,6 +14,9 @@ exports.add_new_comment = (req, res) => {
         newComment.title = req.body.title;
         newComment.text = req.body.text;
         newComment.post = post._id;
+        newComment.image = req.body.image;
+
+        //console.log("comment image key" +req.file.key,req.body.image);
 
         newComment.save((err, comment) => {
             if (err) {
@@ -21,7 +24,7 @@ exports.add_new_comment = (req, res) => {
                 return res.status(500).send("Problem adding new comment to the database.");
                 res.status(200).send(err);
             }
-            console.log("comment added");
+           // console.log("comment added");
             post.comments.push(newComment);
 
             post.save(err => {
@@ -35,10 +38,22 @@ exports.add_new_comment = (req, res) => {
 }
 
 exports.get_comment = (req, res) => {
-    Comment.find({ post: req.params.id }, (err, comments) => {
+  //  console.log("get_comment "+req.params.id);
+    Comment.findById(req.params.id , (err, comments) => {
+      //  console.log("get_comment "+req.params.id);
         if (err) {
             res.send(err);
         }
         res.json(comments);
+    });  
+}
+
+exports.updateComment = (req, res) => {
+    //console.log("req.body "+req.body.title);
+    Comment.findByIdAndUpdate({ _id: req.params.id }, {$set:req.body}, {new:true}, function (err, comment) {
+        if (err){
+            res.status(500).send(err);
+        } 
+        res.status(200).send(comment);
     });  
 }

@@ -25,7 +25,7 @@ var PostSchema = new Schema({
         type: String
     },
     user:{
-        type: Schema.Types.ObjectId, ref: 'User', required: true
+        type: String, ref: 'User', required: true
     },
     upVotes:{
         type: Number

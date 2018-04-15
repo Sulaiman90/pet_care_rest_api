@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     name: {type: String, required:true},
-    profilePicture: {type: String},
+    image: {type: String},
     location: {
         type: { type: String, default: 'Point' },
         coordinates: {
