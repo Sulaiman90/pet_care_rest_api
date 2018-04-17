@@ -47,4 +47,8 @@ router.get('/:id', CommentController.get_comment);
 // '/v1/comment/:id' 
 router.put('/:id', upload.single('image'), CommentController.updateComment);
 
+// delete comment
+// '/v1/post/author:id' - DELETE 
+router.delete('/:id', CommentController.deleteComment);
+
 module.exports = router;

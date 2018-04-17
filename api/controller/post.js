@@ -76,3 +76,12 @@ exports.getPostsByAuthorId = (req, res) => {
     }); 
 };
 
+exports.deletePost = (req, res) => {
+    Post.remove({ _id: req.params.id}, (err, post) => {
+        if (err) {
+            return res.status(500).send(err);
+            res.status(200).send(err);
+        }
+        res.json({message : "Post removed successfully"});
+    });
+};

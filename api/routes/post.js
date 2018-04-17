@@ -53,6 +53,9 @@ router.put('/:id',  upload.single('image'), PostController.updatePost);
 // '/v1/post/author:id' - GET 
 router.get('/author/:id', PostController.getPostsByAuthorId);
 
+// DELETE POSTS 
+// '/v1/post/author:id' - DELETE 
+router.delete('/:id', PostController.deletePost);
 
 
 module.exports = router;

@@ -57,3 +57,14 @@ exports.updateComment = (req, res) => {
         res.status(200).send(comment);
     });  
 }
+
+
+exports.deleteComment = (req, res) => {
+    Comment.remove({ _id: req.params.id}, (err, comment) => {
+        if (err) {
+            return res.status(500).send(err);
+            res.status(200).send(err);
+        }
+        res.json({message : "Comment removed successfully"});
+    });
+};
