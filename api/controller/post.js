@@ -27,7 +27,7 @@ exports.add_new_post = (req, res) => {
 
 exports.get_all_posts = (req, res) => {
   
-    var perPage = req.query.limit > 0 ? req.query.limit : 2;
+    var perPage = req.query.limit > 0 ? req.query.limit : 10;
     perPage = parseInt(perPage);
   
     var page = req.query.page > 0 ? req.query.page : 1;
