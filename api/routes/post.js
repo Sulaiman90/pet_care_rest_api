@@ -58,4 +58,10 @@ router.get('/author/:id', PostController.getPostsByAuthorId);
 router.delete('/:id', PostController.deletePost);
 
 
+// UPDATE POST UPVOTES
+// '/v1/post/:id' - DELETE 
+router.post('/upvote', PostController.upvotePost);
+
+
+
 module.exports = router;

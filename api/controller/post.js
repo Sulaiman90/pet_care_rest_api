@@ -41,7 +41,10 @@ exports.get_all_posts = (req, res) => {
     .populate('comments')
     .populate('_user')
     .exec(function (err, posts){
-        console.log("posts : "+posts);
+        //console.log("posts : "+posts);
+        if(err){
+            return res.status(500).send("Problem getting all posts.");
+        }
         Post.count().exec(function (err, count){
             const response = {
                 currentPage: page,
@@ -50,6 +53,9 @@ exports.get_all_posts = (req, res) => {
                 posts: posts
             }
             //console.log("posts : "+posts);
+            if (err) {
+                return res.status(500).send(err);
+            }
             res.status(200).json(response);
         })
     })
@@ -66,7 +72,7 @@ exports.getPostDetails = (req, res) => {
 };
 
 exports.updatePost = (req, res) => {
-    //console.log("updatePost ");
+    console.log("updatePost ");
     Post.findByIdAndUpdate({ _id: req.params.id }, {$set:req.body}, {new:true}, function (err, post) {
         if (err){
             res.status(500).send(err);
@@ -74,6 +80,32 @@ exports.updatePost = (req, res) => {
         res.status(200).send(post);
     });  
 };
+
+exports.upvotePost = (req, res) => {
+     //console.log("upvotePost "+req.query.postId,req.query.upvote);
+     var upvote = parseInt(req.query.upvote);
+     var msg;
+     if(upvote == 1){
+        msg = "Upvoted successfully";
+     }
+     else{
+        msg = "Downvoted successfully";
+     }
+
+     Post.update(
+        {_id: req.query.postId },
+        {
+            $inc: { upVotes: upvote}
+        },
+        (err, post) => {
+            if (err) {
+                return res.status(500).send(err);
+                res.status(200).send(err);
+            }
+            res.json({message : msg});
+        }
+    ); 
+}
 
 exports.getPostsByAuthorId = (req, res) => {
     Post.find({ _user :  req.params.id  } , (err, post) => {
@@ -96,23 +128,3 @@ exports.deletePost = (req, res) => {
     });
 };
 
-
-/* var Schema = mongoose.Schema;
-
-var CounterSchema = Schema({
-    _id: {type: String, default: "postId"},
-    sequence_value: { type: Number, default: 0 }
-});
-var counter = mongoose.model('counter', CounterSchema);
-
-
-function getNextSequenceValue(sequenceName){
-
-    var sequenceDocument = counter.findAndModify({
-       query:{_id: sequenceName },
-       update: {$inc:{sequence_value:1}},
-       new:true
-    });
-     
-    return sequenceDocument.sequence_value;
- } */
