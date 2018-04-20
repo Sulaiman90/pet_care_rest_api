@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const Post = require("../models/post");
 
+
 exports.add_new_post = (req, res) => {
     var newPost = new Post();
     newPost.status = req.body.status;
@@ -13,7 +14,7 @@ exports.add_new_post = (req, res) => {
     newPost._user = req.body._user;
     newPost.upVotes = req.body.upVotes;
 
-    //console.log(" fieldName "+ req.file.key,req.file.originalname);
+   // console.log(" totalPosts "+newPost.totalPosts);
 
     newPost.save(err => {
         if (err) {
@@ -25,25 +26,34 @@ exports.add_new_post = (req, res) => {
 };
 
 exports.get_all_posts = (req, res) => {
-    /* Post.find({}, (err, posts) => {
-        if (err) {
-            return res.status(500).send("Problem getting all posts.");
-            res.status(200).send(err);
-        }
-        res.json(posts);
-    });  */
+  
+    var perPage = req.query.limit > 0 ? req.query.limit : 2;
+    perPage = parseInt(perPage);
+  
+    var page = req.query.page > 0 ? req.query.page : 1;
+    //console.log("page no : "+page,perPage,typeof(perPage));
+
     Post
     .find()
+    .skip(perPage * (page-1))
+    .limit(perPage)
+    .sort({time: -1})  // sort by time
     .populate('comments')
     .populate('_user')
-    .exec((err, posts) => {
-        if (err) {
-            return res.status(500).send("Problem getting all posts.");
-            res.status(200).send(err);
-        }
-        res.json(posts);
+    .exec(function (err, posts){
+        console.log("posts : "+posts);
+        Post.count().exec(function (err, count){
+            const response = {
+                currentPage: page,
+                totalPages: Math.ceil(count / perPage),
+                totalPosts: count,
+                posts: posts
+            }
+            //console.log("posts : "+posts);
+            res.status(200).json(response);
+        })
     })
-;};
+};
 
 exports.getPostDetails = (req, res) => {
     Post.findById(req.params.id, (err, post) => {
@@ -85,3 +95,24 @@ exports.deletePost = (req, res) => {
         res.json({message : "Post removed successfully"});
     });
 };
+
+
+/* var Schema = mongoose.Schema;
+
+var CounterSchema = Schema({
+    _id: {type: String, default: "postId"},
+    sequence_value: { type: Number, default: 0 }
+});
+var counter = mongoose.model('counter', CounterSchema);
+
+
+function getNextSequenceValue(sequenceName){
+
+    var sequenceDocument = counter.findAndModify({
+       query:{_id: sequenceName },
+       update: {$inc:{sequence_value:1}},
+       new:true
+    });
+     
+    return sequenceDocument.sequence_value;
+ } */

@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var autoIncrement = require('mongoose-auto-increment');
 
 var Schema = mongoose.Schema;
 
@@ -31,7 +32,10 @@ var PostSchema = new Schema({
         type: Number
     },
     comments:[{type: Schema.Types.ObjectId, ref: 'Comment'}]
+    
 });
+
+PostSchema.plugin(autoIncrement.plugin, { model: 'Post', field: 'postId' , startAt: 1 });
 
 var Post = mongoose.model('Post', PostSchema);
 module.exports = Post;
