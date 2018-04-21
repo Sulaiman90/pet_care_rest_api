@@ -3,7 +3,6 @@ var helmet = require('helmet');
 
 const express = require('express');
 const app = express();
-const bodyParser = require('body-Parser');
 
 const config = require('./config');
 const db = require('./db'); 
@@ -15,8 +14,8 @@ app.use(helmet());  // Use Helmet to protect against well known vulnerabilities
 
 const port = process.env.PORT || config.port;
 
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+//app.use(bodyParser.json()); // for parsing application/json
+//app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(compression()); //Compress all routes
 

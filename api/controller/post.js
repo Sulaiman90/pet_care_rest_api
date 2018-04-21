@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const bodyParser = require('body-parser');
 const Post = require("../models/post");
 
 

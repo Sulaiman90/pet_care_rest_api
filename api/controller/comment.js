@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Comment = require("../models/comment");
-const bodyParser = require('body-parser');
 const Post = require('../models/post');
 
 exports.add_new_comment = (req, res) => {
