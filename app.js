@@ -46,9 +46,9 @@ app.use((req, res, next) => {
 
 //Routes which should handle requests
 
-/*  express.Router().get("/api/v1/", (req, res) => {
+app.get("/api/v1/index", (req, res) => {
     res.json({ message: "Welcome to IssueTracker REST API V1" });
-}); */
+}); 
 
 // api routes v1
 app.use('/api/v1/user', userRoutes);
