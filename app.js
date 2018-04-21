@@ -1,3 +1,6 @@
+var compression = require('compression');
+var helmet = require('helmet');
+
 const express = require('express');
 const app = express();
 
@@ -17,6 +20,9 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 /* app.use(bodyParser.json({
     limit: config.bodyLimit
 })); */
+
+app.use(compression()); //Compress all routes
+app.use(helmet());  // Use Helmet to protect against well known vulnerabilities
 
 // middleware
 
