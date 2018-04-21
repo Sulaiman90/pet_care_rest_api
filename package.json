@@ -4,6 +4,7 @@
   "engines": {
     "node": "8.9.4"
   },
+  "private": true,
   "description": "Pet Care REST API",
   "main": "app.js",
   "scripts": {
