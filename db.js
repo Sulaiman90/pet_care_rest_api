@@ -13,6 +13,8 @@ const options = {
 //Set up default mongoose connection
 mongoose.Promise = global.Promise;
 
+mongoose.set('debug', true)
+
 //Set up default mongoose connection
 var db = mongoose.connect(process.env.MONGODB_URI || config.mongodbUrl, options);
 

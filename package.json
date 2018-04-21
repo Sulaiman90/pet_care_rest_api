@@ -1,9 +1,6 @@
 {
   "name": "pet_care",
   "version": "1.0.0",
-  "engines": {
-    "node": "8.9.4"
-  },
   "description": "Pet Care REST API",
   "main": "app.js",
   "scripts": {

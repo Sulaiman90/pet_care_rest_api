@@ -3,6 +3,7 @@ var helmet = require('helmet');
 
 const express = require('express');
 const app = express();
+const bodyParser = require('body-Parser');
 
 const config = require('./config');
 const db = require('./db'); 
@@ -10,19 +11,20 @@ const userRoutes = require('./api/routes/user');
 const postRoutes = require('./api/routes/post');
 const commentRoutes = require('./api/routes/comment');
 
-const bodyParser = require('body-Parser');
+app.use(helmet());  // Use Helmet to protect against well known vulnerabilities
 
 const port = process.env.PORT || config.port;
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+app.use(compression()); //Compress all routes
+
 /* app.use(bodyParser.json({
     limit: config.bodyLimit
 })); */
 
-app.use(compression()); //Compress all routes
-app.use(helmet());  // Use Helmet to protect against well known vulnerabilities
+
 
 // middleware
 
