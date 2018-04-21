@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 //Routes which should handle requests
 
 app.get("/api/v1/index", (req, res) => {
-    res.json({ message: "Welcome to IssueTracker REST API V1" });
+    res.json({ message: "Welcome to Pet Care REST API V1" });
 }); 
 
 // api routes v1
